@@ -1,26 +1,57 @@
 @import "tailwindcss";
 
 :root {
+  --qcc-blue: #1F5A96;
+  --qcc-blue-hover: #174A7C;
+  --qcc-blue-light: #E8F4FD;
+  --qcc-sky: #1BA0D8;
+  --qcc-sky-hover: #1589B9;
+  --qcc-sky-light: #D4F0FC;
+  --qcc-dark: #0F2D4A;
+  --qcc-gray: #64748B;
+  --qcc-gray-light: #F1F5F9;
+  --qcc-success: #16A34A;
+  --qcc-warning: #D97706;
+  --qcc-error: #DC2626;
+
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #0F2D4A;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-qcc-blue: var(--qcc-blue);
+  --color-qcc-blue-hover: var(--qcc-blue-hover);
+  --color-qcc-blue-light: var(--qcc-blue-light);
+  --color-qcc-sky: var(--qcc-sky);
+  --color-qcc-sky-hover: var(--qcc-sky-hover);
+  --color-qcc-sky-light: var(--qcc-sky-light);
+  --color-qcc-dark: var(--qcc-dark);
+  --color-qcc-gray: var(--qcc-gray);
+  --color-qcc-gray-light: var(--qcc-gray-light);
+  --color-qcc-success: var(--qcc-success);
+  --color-qcc-warning: var(--qcc-warning);
+  --color-qcc-error: var(--qcc-error);
+  --font-sans: var(--font-inter);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-inter), 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  line-height: 1.6;
+}
+
+*:focus-visible {
+  outline: 2px solid var(--qcc-sky);
+  outline-offset: 2px;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+html, body {
+  overflow-x: hidden;
 }
