@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server';
 import Link from 'next/link';
+import RoleToggle from '@/components/admin/RoleToggle';
 
 export const dynamic = 'force-dynamic';
 
@@ -56,13 +57,7 @@ export default async function AdminFacultyPage() {
                   <td className="px-4 py-3 text-qcc-gray dark:text-gray-400">{user.email}</td>
                   <td className="px-4 py-3 text-qcc-gray dark:text-gray-400">{user.department || '---'}</td>
                   <td className="px-4 py-3">
-                    <span className={`text-xs px-2 py-0.5 rounded-full ${
-                      user.role === 'admin'
-                        ? 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400'
-                        : 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400'
-                    }`}>
-                      {user.role}
-                    </span>
+                    <RoleToggle userId={user.id} currentRole={user.role} userName={user.full_name} />
                   </td>
                   <td className="px-4 py-3 text-center text-qcc-dark dark:text-white">{countMap.get(user.id) || 0}</td>
                   <td className="px-4 py-3 text-center text-qcc-dark dark:text-white">{badgeMap.get(user.id) || 0}</td>

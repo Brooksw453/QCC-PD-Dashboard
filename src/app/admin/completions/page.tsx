@@ -1,7 +1,15 @@
+import { createClient } from '@/lib/supabase/server';
 import CompletionsManager from '@/components/admin/CompletionsManager';
 
 export const dynamic = 'force-dynamic';
 
-export default function AdminCompletionsPage() {
-  return <CompletionsManager />;
+export default async function AdminCompletionsPage() {
+  const supabase = await createClient();
+
+  const { data: completions } = await supabase
+    .from('completions')
+    .select('*, profile:profiles(full_name, email), course:courses(title)')
+    .order('completed_at', { ascending: false });
+
+  return <CompletionsManager initialCompletions={completions || []} />;
 }

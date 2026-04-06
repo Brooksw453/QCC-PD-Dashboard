@@ -1,7 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
+import { useRouter } from 'next/navigation';
 
 interface CompletionRow {
   id: string;
@@ -14,23 +15,14 @@ interface CompletionRow {
   course: { title: string } | null;
 }
 
-export default function CompletionsManager() {
-  const [completions, setCompletions] = useState<CompletionRow[]>([]);
-  const [loading, setLoading] = useState(true);
+interface Props {
+  initialCompletions: CompletionRow[];
+}
+
+export default function CompletionsManager({ initialCompletions }: Props) {
+  const [completions, setCompletions] = useState<CompletionRow[]>(initialCompletions);
   const supabase = createClient();
-
-  useEffect(() => {
-    loadCompletions();
-  }, []);
-
-  const loadCompletions = async () => {
-    const { data } = await supabase
-      .from('completions')
-      .select('*, profile:profiles(full_name, email), course:courses(title)')
-      .order('completed_at', { ascending: false });
-    setCompletions((data as CompletionRow[]) || []);
-    setLoading(false);
-  };
+  const router = useRouter();
 
   const handleVerify = async (completionId: string) => {
     const { data: { user } } = await supabase.auth.getUser();
@@ -41,18 +33,15 @@ export default function CompletionsManager() {
       .update({ verified_by: user.id, verified_at: new Date().toISOString() })
       .eq('id', completionId);
 
-    loadCompletions();
+    router.refresh();
   };
 
   const handleRevoke = async (completionId: string) => {
     if (!confirm('Revoke this completion? This cannot be undone.')) return;
     await supabase.from('completions').delete().eq('id', completionId);
-    loadCompletions();
+    setCompletions(prev => prev.filter(c => c.id !== completionId));
+    router.refresh();
   };
-
-  if (loading) {
-    return <p className="text-qcc-gray">Loading completions...</p>;
-  }
 
   return (
     <div>
