@@ -22,7 +22,7 @@ export default async function EditCoursePage({ params }: Props) {
 
   return (
     <div>
-      <h2 className="text-lg font-semibold text-qcc-dark mb-6">Edit Course</h2>
+      <h2 className="text-lg font-semibold text-qcc-dark mb-6">Edit Learning Item</h2>
       <CourseForm course={course} />
     </div>
   );

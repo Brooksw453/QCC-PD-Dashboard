@@ -10,10 +10,10 @@ export default function CourseCard({ course, completed }: CourseCardProps) {
   return (
     <Link
       href={`/courses/${course.slug}`}
-      className="group bg-white border border-gray-200 rounded-xl overflow-hidden hover:border-qcc-sky hover:shadow-md transition-all"
+      className="group bg-white dark:bg-slate-800 border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden hover:border-qcc-sky hover:shadow-md transition-all"
     >
       {course.image_url ? (
-        <div className="aspect-video bg-gray-100 overflow-hidden">
+        <div className="aspect-video bg-gray-100 dark:bg-slate-700 overflow-hidden">
           <img
             src={course.image_url}
             alt={course.title}
@@ -29,19 +29,19 @@ export default function CourseCard({ course, completed }: CourseCardProps) {
       )}
       <div className="p-4">
         <div className="flex items-start justify-between gap-2 mb-2">
-          <h3 className="font-semibold text-qcc-dark group-hover:text-qcc-blue transition-colors line-clamp-2">
+          <h3 className="font-semibold text-qcc-dark dark:text-white group-hover:text-qcc-blue transition-colors line-clamp-2">
             {course.title}
           </h3>
           {completed && (
-            <span className="shrink-0 w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
+            <span className="shrink-0 w-6 h-6 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center">
               <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
             </span>
           )}
         </div>
-        <p className="text-sm text-qcc-gray line-clamp-2 mb-3">{course.short_description}</p>
-        <div className="flex items-center gap-3 text-xs text-qcc-gray">
+        <p className="text-sm text-qcc-gray dark:text-gray-400 line-clamp-2 mb-3">{course.short_description}</p>
+        <div className="flex items-center gap-3 text-xs text-qcc-gray dark:text-gray-400">
           {course.estimated_minutes && (
             <span className="flex items-center gap-1">
               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -51,7 +51,7 @@ export default function CourseCard({ course, completed }: CourseCardProps) {
             </span>
           )}
           {course.tags?.slice(0, 2).map((tag) => (
-            <span key={tag} className="bg-qcc-blue-light text-qcc-blue px-2 py-0.5 rounded-full">
+            <span key={tag} className="bg-qcc-blue-light dark:bg-qcc-blue/20 text-qcc-blue dark:text-qcc-sky px-2 py-0.5 rounded-full">
               {tag}
             </span>
           ))}

@@ -110,55 +110,55 @@ export default function PathwayForm({ pathway, assignedCourseIds = [] }: Pathway
 
   return (
     <form onSubmit={handleSubmit} className="max-w-2xl space-y-5">
-      {error && <div className="bg-red-50 text-red-700 px-4 py-3 rounded-lg text-sm">{error}</div>}
+      {error && <div className="bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-400 px-4 py-3 rounded-lg text-sm">{error}</div>}
 
       <div>
-        <label className="block text-sm font-medium text-qcc-dark mb-1">Title</label>
+        <label className="block text-sm font-medium text-qcc-dark dark:text-slate-100 mb-1">Title</label>
         <input
           type="text"
           value={form.title}
           onChange={(e) => handleTitleChange(e.target.value)}
           required
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-qcc-sky focus:border-transparent"
+          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:bg-slate-700 dark:text-white rounded-lg text-sm focus:ring-2 focus:ring-qcc-sky focus:border-transparent"
         />
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-qcc-dark mb-1">Slug</label>
+        <label className="block text-sm font-medium text-qcc-dark dark:text-slate-100 mb-1">Slug</label>
         <input
           type="text"
           value={form.slug}
           onChange={(e) => setForm(prev => ({ ...prev, slug: e.target.value }))}
           required
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-qcc-sky focus:border-transparent"
+          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:bg-slate-700 dark:text-white rounded-lg text-sm focus:ring-2 focus:ring-qcc-sky focus:border-transparent"
         />
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-qcc-dark mb-1">Description</label>
+        <label className="block text-sm font-medium text-qcc-dark dark:text-slate-100 mb-1">Description</label>
         <textarea
           value={form.description}
           onChange={(e) => setForm(prev => ({ ...prev, description: e.target.value }))}
           required
           rows={3}
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-qcc-sky focus:border-transparent"
+          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:bg-slate-700 dark:text-white rounded-lg text-sm focus:ring-2 focus:ring-qcc-sky focus:border-transparent"
         />
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-qcc-dark mb-1">Badge Name</label>
+          <label className="block text-sm font-medium text-qcc-dark dark:text-slate-100 mb-1">Badge Name</label>
           <input
             type="text"
             value={form.badge_name}
             onChange={(e) => setForm(prev => ({ ...prev, badge_name: e.target.value }))}
             required
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-qcc-sky focus:border-transparent"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:bg-slate-700 dark:text-white rounded-lg text-sm focus:ring-2 focus:ring-qcc-sky focus:border-transparent"
             placeholder="e.g. Accessibility Champion"
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-qcc-dark mb-1">Badge Color</label>
+          <label className="block text-sm font-medium text-qcc-dark dark:text-slate-100 mb-1">Badge Color</label>
           <div className="flex items-center gap-2">
             <input
               type="color"
@@ -170,7 +170,7 @@ export default function PathwayForm({ pathway, assignedCourseIds = [] }: Pathway
               type="text"
               value={form.badge_color}
               onChange={(e) => setForm(prev => ({ ...prev, badge_color: e.target.value }))}
-              className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-qcc-sky focus:border-transparent"
+              className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 dark:bg-slate-700 dark:text-white rounded-lg text-sm focus:ring-2 focus:ring-qcc-sky focus:border-transparent"
             />
           </div>
         </div>
@@ -178,12 +178,12 @@ export default function PathwayForm({ pathway, assignedCourseIds = [] }: Pathway
 
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-qcc-dark mb-1">Sort Order</label>
+          <label className="block text-sm font-medium text-qcc-dark dark:text-slate-100 mb-1">Sort Order</label>
           <input
             type="number"
             value={form.sort_order}
             onChange={(e) => setForm(prev => ({ ...prev, sort_order: e.target.value }))}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-qcc-sky focus:border-transparent"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:bg-slate-700 dark:text-white rounded-lg text-sm focus:ring-2 focus:ring-qcc-sky focus:border-transparent"
           />
         </div>
         <div className="flex items-end">
@@ -194,21 +194,21 @@ export default function PathwayForm({ pathway, assignedCourseIds = [] }: Pathway
               onChange={(e) => setForm(prev => ({ ...prev, is_published: e.target.checked }))}
               className="w-4 h-4 rounded border-gray-300 text-qcc-blue focus:ring-qcc-sky"
             />
-            <span className="text-sm font-medium text-qcc-dark">Published</span>
+            <span className="text-sm font-medium text-qcc-dark dark:text-slate-100">Published</span>
           </label>
         </div>
       </div>
 
       {/* Course Assignment */}
       <div>
-        <label className="block text-sm font-medium text-qcc-dark mb-2">
-          Courses in Pathway <span className="text-qcc-gray font-normal">({selectedCourseIds.length} selected)</span>
+        <label className="block text-sm font-medium text-qcc-dark dark:text-slate-100 mb-2">
+          Courses in Pathway <span className="text-qcc-gray dark:text-gray-400 font-normal">({selectedCourseIds.length} selected)</span>
         </label>
-        <div className="border border-gray-200 rounded-lg max-h-60 overflow-y-auto divide-y divide-gray-100">
+        <div className="border border-gray-200 dark:border-gray-700 rounded-lg max-h-60 overflow-y-auto divide-y divide-gray-100 dark:divide-gray-700">
           {allCourses.map((course) => (
             <label
               key={course.id}
-              className="flex items-center gap-3 px-3 py-2.5 hover:bg-gray-50 cursor-pointer"
+              className="flex items-center gap-3 px-3 py-2.5 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer"
             >
               <input
                 type="checkbox"
@@ -216,14 +216,14 @@ export default function PathwayForm({ pathway, assignedCourseIds = [] }: Pathway
                 onChange={() => toggleCourse(course.id)}
                 className="w-4 h-4 rounded border-gray-300 text-qcc-blue focus:ring-qcc-sky"
               />
-              <span className="text-sm text-qcc-dark">{course.title}</span>
+              <span className="text-sm text-qcc-dark dark:text-white">{course.title}</span>
               {!course.is_published && (
-                <span className="text-xs bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded">Draft</span>
+                <span className="text-xs bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 px-1.5 py-0.5 rounded">Draft</span>
               )}
             </label>
           ))}
           {allCourses.length === 0 && (
-            <p className="text-sm text-qcc-gray px-3 py-4 text-center">No courses available. Create courses first.</p>
+            <p className="text-sm text-qcc-gray dark:text-gray-400 px-3 py-4 text-center">No courses available. Create courses first.</p>
           )}
         </div>
       </div>
@@ -241,7 +241,7 @@ export default function PathwayForm({ pathway, assignedCourseIds = [] }: Pathway
             type="button"
             onClick={handleDelete}
             disabled={loading}
-            className="px-6 py-2.5 text-red-600 hover:bg-red-50 rounded-lg font-medium transition-colors disabled:opacity-50"
+            className="px-6 py-2.5 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg font-medium transition-colors disabled:opacity-50"
           >
             Delete
           </button>

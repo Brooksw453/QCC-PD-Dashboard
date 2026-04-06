@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     .select('title')
     .eq('slug', slug)
     .single();
-  return { title: course?.title || 'Course' };
+  return { title: course?.title || 'Learning Item' };
 }
 
 export default async function CourseDetailPage({ params }: Props) {
@@ -60,11 +60,11 @@ export default async function CourseDetailPage({ params }: Props) {
         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
         </svg>
-        Back to courses
+        Back to learning items
       </Link>
 
       {course.image_url ? (
-        <div className="aspect-video bg-gray-100 rounded-xl overflow-hidden mb-6">
+        <div className="aspect-video bg-gray-100 dark:bg-slate-700 rounded-xl overflow-hidden mb-6">
           <img src={course.image_url} alt={course.title} className="w-full h-full object-cover" />
         </div>
       ) : (
@@ -75,9 +75,31 @@ export default async function CourseDetailPage({ params }: Props) {
         </div>
       )}
 
-      <h1 className="text-3xl font-bold text-qcc-dark mb-3">{course.title}</h1>
+      {/* Pathway banner */}
+      {pathwayCourses && pathwayCourses.length > 0 && (
+        <div className="flex flex-wrap gap-2 mb-4">
+          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+          {pathwayCourses.map((pc: any) => (
+            pc.pathway && (
+              <Link
+                key={pc.pathway.id}
+                href={`/pathways/${pc.pathway.slug}`}
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white hover:opacity-90 transition-opacity"
+                style={{ backgroundColor: pc.pathway.badge_color }}
+              >
+                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+                </svg>
+                Part of: {pc.pathway.badge_name}
+              </Link>
+            )
+          ))}
+        </div>
+      )}
 
-      <div className="flex flex-wrap items-center gap-3 mb-6 text-sm text-qcc-gray">
+      <h1 className="text-3xl font-bold text-qcc-dark dark:text-white mb-3">{course.title}</h1>
+
+      <div className="flex flex-wrap items-center gap-3 mb-6 text-sm text-qcc-gray dark:text-gray-400">
         {course.estimated_minutes && (
           <span className="flex items-center gap-1">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -87,40 +109,15 @@ export default async function CourseDetailPage({ params }: Props) {
           </span>
         )}
         {course.tags?.map((tag: string) => (
-          <span key={tag} className="bg-qcc-blue-light text-qcc-blue px-2.5 py-0.5 rounded-full text-xs">
+          <span key={tag} className="bg-qcc-blue-light dark:bg-qcc-blue/20 text-qcc-blue dark:text-qcc-sky px-2.5 py-0.5 rounded-full text-xs">
             {tag}
           </span>
         ))}
       </div>
 
-      <div className="prose max-w-none text-qcc-dark mb-8">
-        <p className="text-lg text-qcc-gray leading-relaxed">{course.description}</p>
+      <div className="prose max-w-none mb-8">
+        <p className="text-lg text-qcc-gray dark:text-gray-300 leading-relaxed">{course.description}</p>
       </div>
-
-      {/* Pathways this course belongs to */}
-      {pathwayCourses && pathwayCourses.length > 0 && (
-        <div className="mb-8">
-          <h3 className="text-sm font-medium text-qcc-gray mb-2">Part of:</h3>
-          <div className="flex flex-wrap gap-2">
-            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-            {pathwayCourses.map((pc: any) => (
-              pc.pathway && (
-                <Link
-                  key={pc.pathway.id}
-                  href={`/pathways/${pc.pathway.slug}`}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium text-white hover:opacity-90 transition-opacity"
-                  style={{ backgroundColor: pc.pathway.badge_color }}
-                >
-                  <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
-                  </svg>
-                  {pc.pathway.badge_name}
-                </Link>
-              )
-            ))}
-          </div>
-        </div>
-      )}
 
       {/* Action buttons */}
       <div className="flex flex-wrap gap-4 items-center">

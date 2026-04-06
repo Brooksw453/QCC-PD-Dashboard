@@ -43,11 +43,11 @@ export default async function FacultyDetailPage({ params }: Props) {
       </Link>
 
       <div className="mb-6">
-        <h2 className="text-xl font-semibold text-qcc-dark">{profile.full_name}</h2>
-        <p className="text-qcc-gray text-sm">{profile.email}</p>
-        {profile.department && <p className="text-qcc-gray text-sm">{profile.department}</p>}
+        <h2 className="text-xl font-semibold text-qcc-dark dark:text-white">{profile.full_name}</h2>
+        <p className="text-qcc-gray dark:text-gray-400 text-sm">{profile.email}</p>
+        {profile.department && <p className="text-qcc-gray dark:text-gray-400 text-sm">{profile.department}</p>}
         <span className={`inline-block mt-1 text-xs px-2 py-0.5 rounded-full ${
-          profile.role === 'admin' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700'
+          profile.role === 'admin' ? 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400' : 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400'
         }`}>
           {profile.role}
         </span>
@@ -56,16 +56,16 @@ export default async function FacultyDetailPage({ params }: Props) {
       <div className="grid md:grid-cols-2 gap-8">
         {/* Completions */}
         <div>
-          <h3 className="text-lg font-semibold text-qcc-dark mb-3">
+          <h3 className="text-lg font-semibold text-qcc-dark dark:text-white mb-3">
             Completed Courses ({completions?.length || 0})
           </h3>
           {completions && completions.length > 0 ? (
             <div className="space-y-2">
               {completions.map((c) => (
-                <div key={c.id} className="bg-white border border-gray-200 rounded-lg p-3 flex items-center justify-between">
+                <div key={c.id} className="bg-white dark:bg-slate-800 border border-gray-200 dark:border-gray-700 rounded-lg p-3 flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-qcc-dark">{c.course?.title}</p>
-                    <p className="text-xs text-qcc-gray">
+                    <p className="text-sm font-medium text-qcc-dark dark:text-white">{c.course?.title}</p>
+                    <p className="text-xs text-qcc-gray dark:text-gray-400">
                       {new Date(c.completed_at).toLocaleDateString()}
                       {c.verified_by ? ' — Verified' : ' — Self-reported'}
                     </p>
@@ -74,19 +74,19 @@ export default async function FacultyDetailPage({ params }: Props) {
               ))}
             </div>
           ) : (
-            <p className="text-sm text-qcc-gray">No completions yet.</p>
+            <p className="text-sm text-qcc-gray dark:text-gray-400">No completions yet.</p>
           )}
         </div>
 
         {/* Badges */}
         <div>
-          <h3 className="text-lg font-semibold text-qcc-dark mb-3">
+          <h3 className="text-lg font-semibold text-qcc-dark dark:text-white mb-3">
             Badges Earned ({badges?.length || 0})
           </h3>
           {badges && badges.length > 0 ? (
             <div className="space-y-2">
               {badges.map((b) => (
-                <div key={b.id} className="bg-white border border-gray-200 rounded-lg p-3 flex items-center gap-3">
+                <div key={b.id} className="bg-white dark:bg-slate-800 border border-gray-200 dark:border-gray-700 rounded-lg p-3 flex items-center gap-3">
                   <div
                     className="w-10 h-10 rounded-full flex items-center justify-center text-white shrink-0"
                     style={{ backgroundColor: b.pathway?.badge_color || '#1F5A96' }}
@@ -96,8 +96,8 @@ export default async function FacultyDetailPage({ params }: Props) {
                     </svg>
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-qcc-dark">{b.pathway?.badge_name}</p>
-                    <p className="text-xs text-qcc-gray">
+                    <p className="text-sm font-medium text-qcc-dark dark:text-white">{b.pathway?.badge_name}</p>
+                    <p className="text-xs text-qcc-gray dark:text-gray-400">
                       Earned {new Date(b.earned_at).toLocaleDateString()}
                     </p>
                   </div>
@@ -105,7 +105,7 @@ export default async function FacultyDetailPage({ params }: Props) {
               ))}
             </div>
           ) : (
-            <p className="text-sm text-qcc-gray">No badges earned yet.</p>
+            <p className="text-sm text-qcc-gray dark:text-gray-400">No badges earned yet.</p>
           )}
         </div>
       </div>

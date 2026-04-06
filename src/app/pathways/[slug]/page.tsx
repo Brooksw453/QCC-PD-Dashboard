@@ -76,25 +76,25 @@ export default async function PathwayDetailPage({ params }: Props) {
           </svg>
         </div>
         <div>
-          <h1 className="text-3xl font-bold text-qcc-dark">{pathway.title}</h1>
+          <h1 className="text-3xl font-bold text-qcc-dark dark:text-white">{pathway.title}</h1>
           <p className="text-sm font-medium mt-1" style={{ color: pathway.badge_color }}>
             {pathway.badge_name}
           </p>
         </div>
       </div>
 
-      <p className="text-qcc-gray mb-6">{pathway.description}</p>
+      <p className="text-qcc-gray dark:text-gray-400 mb-6">{pathway.description}</p>
 
       {/* Progress */}
       {user && (
-        <div className="bg-white border border-gray-200 rounded-xl p-5 mb-8">
+        <div className="bg-white dark:bg-slate-800 border border-gray-200 dark:border-gray-700 rounded-xl p-5 mb-8">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm font-medium text-qcc-dark">Your Progress</span>
-            <span className="text-sm text-qcc-gray">
-              {completedCount} of {totalCourses} courses
+            <span className="text-sm font-medium text-qcc-dark dark:text-white">Your Progress</span>
+            <span className="text-sm text-qcc-gray dark:text-gray-400">
+              {completedCount} of {totalCourses} learning items
             </span>
           </div>
-          <div className="w-full bg-gray-200 rounded-full h-3">
+          <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-3">
             <div
               className="h-3 rounded-full transition-all"
               style={{
@@ -112,7 +112,7 @@ export default async function PathwayDetailPage({ params }: Props) {
       )}
 
       {/* Course List */}
-      <h2 className="text-lg font-semibold text-qcc-dark mb-4">Courses in this Pathway</h2>
+      <h2 className="text-lg font-semibold text-qcc-dark dark:text-white mb-4">Learning Items in this Pathway</h2>
       <div className="space-y-3">
         {pathwayCourses?.map((pc, index) => {
           const course = pc.course;
@@ -123,12 +123,12 @@ export default async function PathwayDetailPage({ params }: Props) {
             <Link
               key={pc.id}
               href={`/courses/${course.slug}`}
-              className="flex items-center gap-4 bg-white border border-gray-200 rounded-xl p-4 hover:border-qcc-sky transition-colors"
+              className="flex items-center gap-4 bg-white dark:bg-slate-800 border border-gray-200 dark:border-gray-700 rounded-xl p-4 hover:border-qcc-sky transition-colors"
             >
               <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 text-sm font-bold ${
                 isCompleted
-                  ? 'bg-green-100 text-green-600'
-                  : 'bg-gray-100 text-qcc-gray'
+                  ? 'bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400'
+                  : 'bg-gray-100 dark:bg-gray-700 text-qcc-gray dark:text-gray-400'
               }`}>
                 {isCompleted ? (
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -139,11 +139,11 @@ export default async function PathwayDetailPage({ params }: Props) {
                 )}
               </div>
               <div className="min-w-0 flex-1">
-                <p className="font-medium text-qcc-dark">{course.title}</p>
-                <p className="text-xs text-qcc-gray truncate">{course.short_description}</p>
+                <p className="font-medium text-qcc-dark dark:text-white">{course.title}</p>
+                <p className="text-xs text-qcc-gray dark:text-gray-400 truncate">{course.short_description}</p>
               </div>
               {course.estimated_minutes && (
-                <span className="text-xs text-qcc-gray shrink-0">{course.estimated_minutes} min</span>
+                <span className="text-xs text-qcc-gray dark:text-gray-400 shrink-0">{course.estimated_minutes} min</span>
               )}
             </Link>
           );

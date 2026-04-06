@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     template: "%s | QCC Professional Development",
   },
   description:
-    "Professional development course dashboard for Quinsigamond Community College faculty.",
+    "Professional development dashboard for Quinsigamond Community College faculty.",
 };
 
 export default function RootLayout({
@@ -25,8 +25,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col bg-white text-qcc-dark">
+    <html lang="en" suppressHydrationWarning className={`${inter.variable} h-full antialiased`}>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: `try{const t=localStorage.getItem('theme');const d=t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme:dark)').matches);if(d)document.documentElement.classList.add('dark')}catch{}` }} />
+      </head>
+      <body className="min-h-full flex flex-col bg-white dark:bg-slate-900 text-qcc-dark dark:text-slate-100 transition-colors">
         <Navbar />
         <main className="flex-1">{children}</main>
         <Footer />

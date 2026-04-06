@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   --qcc-blue: #1F5A96;
   --qcc-blue-hover: #174A7C;
@@ -16,6 +18,14 @@
 
   --background: #ffffff;
   --foreground: #0F2D4A;
+}
+
+.dark {
+  --background: #0f172a;
+  --foreground: #f1f5f9;
+  --qcc-blue-light: #1e3a5f;
+  --qcc-sky-light: #0c3d5a;
+  --qcc-gray-light: #1e293b;
 }
 
 @theme inline {
@@ -41,6 +51,10 @@ body {
   color: var(--foreground);
   font-family: var(--font-inter), 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
   line-height: 1.6;
+}
+
+html.dark {
+  color-scheme: dark;
 }
 
 *:focus-visible {

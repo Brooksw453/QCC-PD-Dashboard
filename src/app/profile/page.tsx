@@ -64,45 +64,45 @@ export default function ProfilePage() {
 
   return (
     <div className="max-w-md mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold text-qcc-dark mb-6">Edit Profile</h1>
+      <h1 className="text-2xl font-bold text-qcc-dark dark:text-white mb-6">Edit Profile</h1>
 
-      <form onSubmit={handleSave} className="bg-white border border-gray-200 rounded-xl p-6 space-y-4">
+      <form onSubmit={handleSave} className="bg-white dark:bg-slate-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6 space-y-4">
         {message && (
           <div className={`px-4 py-3 rounded-lg text-sm ${
-            message.includes('Failed') ? 'bg-red-50 text-red-700' : 'bg-green-50 text-green-700'
+            message.includes('Failed') ? 'bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-400' : 'bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-400'
           }`}>
             {message}
           </div>
         )}
 
         <div>
-          <label className="block text-sm font-medium text-qcc-dark mb-1">Email</label>
+          <label className="block text-sm font-medium text-qcc-dark dark:text-slate-100 mb-1">Email</label>
           <input
             type="email"
             value={email}
             disabled
-            className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm bg-gray-50 text-qcc-gray"
+            className="w-full px-3 py-2 border border-gray-200 dark:border-gray-600 rounded-lg text-sm bg-gray-50 dark:bg-slate-700 text-qcc-gray dark:text-gray-400"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-qcc-dark mb-1">Full Name</label>
+          <label className="block text-sm font-medium text-qcc-dark dark:text-slate-100 mb-1">Full Name</label>
           <input
             type="text"
             value={fullName}
             onChange={(e) => setFullName(e.target.value)}
             required
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-qcc-sky focus:border-transparent"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:bg-slate-700 dark:text-white rounded-lg text-sm focus:ring-2 focus:ring-qcc-sky focus:border-transparent"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-qcc-dark mb-1">Department</label>
+          <label className="block text-sm font-medium text-qcc-dark dark:text-slate-100 mb-1">Department</label>
           <input
             type="text"
             value={department}
             onChange={(e) => setDepartment(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-qcc-sky focus:border-transparent"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:bg-slate-700 dark:text-white rounded-lg text-sm focus:ring-2 focus:ring-qcc-sky focus:border-transparent"
             placeholder="e.g. English, Nursing, IT"
           />
         </div>

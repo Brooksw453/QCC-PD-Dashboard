@@ -41,19 +41,19 @@ export default function LoginPage() {
             height={71}
             className="mx-auto mb-4"
           />
-          <h1 className="text-2xl font-bold text-qcc-dark">Welcome Back</h1>
-          <p className="text-qcc-gray mt-1">Sign in to your PD dashboard</p>
+          <h1 className="text-2xl font-bold text-qcc-dark dark:text-white">Welcome Back</h1>
+          <p className="text-qcc-gray dark:text-gray-400 mt-1">Sign in to your PD dashboard</p>
         </div>
 
-        <form onSubmit={handleLogin} className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm space-y-4">
+        <form onSubmit={handleLogin} className="bg-white dark:bg-slate-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6 shadow-sm space-y-4">
           {error && (
-            <div className="bg-red-50 text-red-700 px-4 py-3 rounded-lg text-sm">
+            <div className="bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-400 px-4 py-3 rounded-lg text-sm">
               {error}
             </div>
           )}
 
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-qcc-dark mb-1">
+            <label htmlFor="email" className="block text-sm font-medium text-qcc-dark dark:text-slate-100 mb-1">
               Email
             </label>
             <input
@@ -62,13 +62,13 @@ export default function LoginPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-qcc-sky focus:border-transparent text-sm"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:bg-slate-700 dark:text-white rounded-lg focus:ring-2 focus:ring-qcc-sky focus:border-transparent text-sm"
               placeholder="you@qcc.edu"
             />
           </div>
 
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-qcc-dark mb-1">
+            <label htmlFor="password" className="block text-sm font-medium text-qcc-dark dark:text-slate-100 mb-1">
               Password
             </label>
             <input
@@ -77,7 +77,7 @@ export default function LoginPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-qcc-sky focus:border-transparent text-sm"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:bg-slate-700 dark:text-white rounded-lg focus:ring-2 focus:ring-qcc-sky focus:border-transparent text-sm"
               placeholder="Your password"
             />
           </div>

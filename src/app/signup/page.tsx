@@ -45,12 +45,12 @@ export default function SignupPage() {
     return (
       <div className="min-h-[80vh] flex items-center justify-center px-4">
         <div className="w-full max-w-md text-center">
-          <div className="bg-green-50 border border-green-200 rounded-xl p-8">
+          <div className="bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-800 rounded-xl p-8">
             <svg className="w-12 h-12 text-green-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            <h2 className="text-xl font-bold text-qcc-dark mb-2">Check Your Email</h2>
-            <p className="text-qcc-gray text-sm">
+            <h2 className="text-xl font-bold text-qcc-dark dark:text-white mb-2">Check Your Email</h2>
+            <p className="text-qcc-gray dark:text-gray-400 text-sm">
               We sent a confirmation link to <strong>{email}</strong>. Click it to activate your account.
             </p>
             <Link href="/login" className="inline-block mt-4 text-qcc-sky hover:text-qcc-sky-hover text-sm font-medium">
@@ -73,19 +73,19 @@ export default function SignupPage() {
             height={71}
             className="mx-auto mb-4"
           />
-          <h1 className="text-2xl font-bold text-qcc-dark">Create Account</h1>
-          <p className="text-qcc-gray mt-1">Join the QCC Professional Development program</p>
+          <h1 className="text-2xl font-bold text-qcc-dark dark:text-white">Create Account</h1>
+          <p className="text-qcc-gray dark:text-gray-400 mt-1">Join the QCC Professional Development program</p>
         </div>
 
-        <form onSubmit={handleSignup} className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm space-y-4">
+        <form onSubmit={handleSignup} className="bg-white dark:bg-slate-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6 shadow-sm space-y-4">
           {error && (
-            <div className="bg-red-50 text-red-700 px-4 py-3 rounded-lg text-sm">
+            <div className="bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-400 px-4 py-3 rounded-lg text-sm">
               {error}
             </div>
           )}
 
           <div>
-            <label htmlFor="fullName" className="block text-sm font-medium text-qcc-dark mb-1">
+            <label htmlFor="fullName" className="block text-sm font-medium text-qcc-dark dark:text-slate-100 mb-1">
               Full Name
             </label>
             <input
@@ -94,13 +94,13 @@ export default function SignupPage() {
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
               required
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-qcc-sky focus:border-transparent text-sm"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:bg-slate-700 dark:text-white rounded-lg focus:ring-2 focus:ring-qcc-sky focus:border-transparent text-sm"
               placeholder="Jane Smith"
             />
           </div>
 
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-qcc-dark mb-1">
+            <label htmlFor="email" className="block text-sm font-medium text-qcc-dark dark:text-slate-100 mb-1">
               Email
             </label>
             <input
@@ -109,27 +109,27 @@ export default function SignupPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-qcc-sky focus:border-transparent text-sm"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:bg-slate-700 dark:text-white rounded-lg focus:ring-2 focus:ring-qcc-sky focus:border-transparent text-sm"
               placeholder="you@qcc.edu"
             />
           </div>
 
           <div>
-            <label htmlFor="department" className="block text-sm font-medium text-qcc-dark mb-1">
-              Department <span className="text-qcc-gray font-normal">(optional)</span>
+            <label htmlFor="department" className="block text-sm font-medium text-qcc-dark dark:text-slate-100 mb-1">
+              Department <span className="text-qcc-gray dark:text-gray-400 font-normal">(optional)</span>
             </label>
             <input
               id="department"
               type="text"
               value={department}
               onChange={(e) => setDepartment(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-qcc-sky focus:border-transparent text-sm"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:bg-slate-700 dark:text-white rounded-lg focus:ring-2 focus:ring-qcc-sky focus:border-transparent text-sm"
               placeholder="e.g. English, Nursing, IT"
             />
           </div>
 
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-qcc-dark mb-1">
+            <label htmlFor="password" className="block text-sm font-medium text-qcc-dark dark:text-slate-100 mb-1">
               Password
             </label>
             <input
@@ -139,7 +139,7 @@ export default function SignupPage() {
               onChange={(e) => setPassword(e.target.value)}
               required
               minLength={6}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-qcc-sky focus:border-transparent text-sm"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:bg-slate-700 dark:text-white rounded-lg focus:ring-2 focus:ring-qcc-sky focus:border-transparent text-sm"
               placeholder="At least 6 characters"
             />
           </div>
@@ -152,7 +152,7 @@ export default function SignupPage() {
             {loading ? 'Creating account...' : 'Create Account'}
           </button>
 
-          <p className="text-center text-sm text-qcc-gray">
+          <p className="text-center text-sm text-qcc-gray dark:text-gray-400">
             Already have an account?{' '}
             <Link href="/login" className="text-qcc-sky hover:text-qcc-sky-hover font-medium">
               Sign in

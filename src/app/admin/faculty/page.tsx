@@ -33,39 +33,39 @@ export default async function AdminFacultyPage() {
 
   return (
     <div>
-      <h2 className="text-lg font-semibold text-qcc-dark mb-6">Faculty Members</h2>
+      <h2 className="text-lg font-semibold text-qcc-dark dark:text-white mb-6">Faculty Members</h2>
 
       {faculty && faculty.length > 0 ? (
-        <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
+        <div className="bg-white dark:bg-slate-800 border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
           <table className="w-full text-sm">
             <thead>
-              <tr className="bg-gray-50 border-b border-gray-200">
-                <th className="text-left px-4 py-3 font-medium text-qcc-gray">Name</th>
-                <th className="text-left px-4 py-3 font-medium text-qcc-gray">Email</th>
-                <th className="text-left px-4 py-3 font-medium text-qcc-gray">Department</th>
-                <th className="text-left px-4 py-3 font-medium text-qcc-gray">Role</th>
-                <th className="text-center px-4 py-3 font-medium text-qcc-gray">Completions</th>
-                <th className="text-center px-4 py-3 font-medium text-qcc-gray">Badges</th>
-                <th className="text-right px-4 py-3 font-medium text-qcc-gray">Actions</th>
+              <tr className="bg-gray-50 dark:bg-slate-900 border-b border-gray-200 dark:border-gray-700">
+                <th className="text-left px-4 py-3 font-medium text-qcc-gray dark:text-gray-400">Name</th>
+                <th className="text-left px-4 py-3 font-medium text-qcc-gray dark:text-gray-400">Email</th>
+                <th className="text-left px-4 py-3 font-medium text-qcc-gray dark:text-gray-400">Department</th>
+                <th className="text-left px-4 py-3 font-medium text-qcc-gray dark:text-gray-400">Role</th>
+                <th className="text-center px-4 py-3 font-medium text-qcc-gray dark:text-gray-400">Completions</th>
+                <th className="text-center px-4 py-3 font-medium text-qcc-gray dark:text-gray-400">Badges</th>
+                <th className="text-right px-4 py-3 font-medium text-qcc-gray dark:text-gray-400">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100">
+            <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
               {faculty.map((user) => (
-                <tr key={user.id} className="hover:bg-gray-50">
-                  <td className="px-4 py-3 font-medium text-qcc-dark">{user.full_name}</td>
-                  <td className="px-4 py-3 text-qcc-gray">{user.email}</td>
-                  <td className="px-4 py-3 text-qcc-gray">{user.department || '—'}</td>
+                <tr key={user.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
+                  <td className="px-4 py-3 font-medium text-qcc-dark dark:text-white">{user.full_name}</td>
+                  <td className="px-4 py-3 text-qcc-gray dark:text-gray-400">{user.email}</td>
+                  <td className="px-4 py-3 text-qcc-gray dark:text-gray-400">{user.department || '---'}</td>
                   <td className="px-4 py-3">
                     <span className={`text-xs px-2 py-0.5 rounded-full ${
                       user.role === 'admin'
-                        ? 'bg-purple-100 text-purple-700'
-                        : 'bg-blue-100 text-blue-700'
+                        ? 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400'
+                        : 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400'
                     }`}>
                       {user.role}
                     </span>
                   </td>
-                  <td className="px-4 py-3 text-center text-qcc-dark">{countMap.get(user.id) || 0}</td>
-                  <td className="px-4 py-3 text-center text-qcc-dark">{badgeMap.get(user.id) || 0}</td>
+                  <td className="px-4 py-3 text-center text-qcc-dark dark:text-white">{countMap.get(user.id) || 0}</td>
+                  <td className="px-4 py-3 text-center text-qcc-dark dark:text-white">{badgeMap.get(user.id) || 0}</td>
                   <td className="px-4 py-3 text-right">
                     <Link
                       href={`/admin/faculty/${user.id}`}
@@ -80,7 +80,7 @@ export default async function AdminFacultyPage() {
           </table>
         </div>
       ) : (
-        <p className="text-qcc-gray text-sm">No faculty members registered yet.</p>
+        <p className="text-qcc-gray dark:text-gray-400 text-sm">No faculty members registered yet.</p>
       )}
     </div>
   );

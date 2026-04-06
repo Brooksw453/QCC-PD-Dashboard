@@ -61,23 +61,23 @@ export default function ResetPasswordPage() {
     <div className="min-h-[80vh] flex items-center justify-center px-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold text-qcc-dark">Set New Password</h1>
-          <p className="text-qcc-gray mt-1">Enter your new password below</p>
+          <h1 className="text-2xl font-bold text-qcc-dark dark:text-white">Set New Password</h1>
+          <p className="text-qcc-gray dark:text-gray-400 mt-1">Enter your new password below</p>
         </div>
 
-        <form onSubmit={handleUpdate} className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm space-y-4">
+        <form onSubmit={handleUpdate} className="bg-white dark:bg-slate-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6 shadow-sm space-y-4">
           {error && (
-            <div className="bg-red-50 text-red-700 px-4 py-3 rounded-lg text-sm">{error}</div>
+            <div className="bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-400 px-4 py-3 rounded-lg text-sm">{error}</div>
           )}
 
           {!sessionReady && !error && (
-            <div className="bg-amber-50 text-amber-700 px-4 py-3 rounded-lg text-sm">
+            <div className="bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 px-4 py-3 rounded-lg text-sm">
               Verifying your reset link... If this persists, request a new reset link from the login page.
             </div>
           )}
 
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-qcc-dark mb-1">New Password</label>
+            <label htmlFor="password" className="block text-sm font-medium text-qcc-dark dark:text-slate-100 mb-1">New Password</label>
             <input
               id="password"
               type="password"
@@ -85,7 +85,7 @@ export default function ResetPasswordPage() {
               onChange={(e) => setPassword(e.target.value)}
               required
               minLength={6}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-qcc-sky focus:border-transparent text-sm"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:bg-slate-700 dark:text-white rounded-lg focus:ring-2 focus:ring-qcc-sky focus:border-transparent text-sm"
               placeholder="At least 6 characters"
             />
           </div>
