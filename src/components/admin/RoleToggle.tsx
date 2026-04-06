@@ -17,6 +17,13 @@ export default function RoleToggle({ userId, currentRole, userName }: RoleToggle
   const router = useRouter();
 
   const handleToggle = async () => {
+    // Prevent admins from demoting themselves
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user?.id === userId && role === 'admin') {
+      alert('You cannot remove your own admin role. Ask another admin to do this.');
+      return;
+    }
+
     const newRole = role === 'admin' ? 'faculty' : 'admin';
     const action = newRole === 'admin' ? 'promote to admin' : 'change to faculty';
 
