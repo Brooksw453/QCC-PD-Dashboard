@@ -49,7 +49,7 @@ async function RecentCompletions() {
   const supabase = await createClient();
   const { data: completions } = await supabase
     .from('completions')
-    .select('*, profile:profiles(full_name, email), course:courses(title)')
+    .select('*, profile:profiles!completions_user_id_fkey(full_name, email), course:courses(title)')
     .order('completed_at', { ascending: false })
     .limit(10);
 
