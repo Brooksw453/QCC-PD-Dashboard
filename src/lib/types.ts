@@ -20,6 +20,7 @@ export interface Course {
   is_published: boolean;
   sort_order: number;
   tags: string[];
+  format: 'document' | 'video' | 'articulate' | 'webpage' | 'presentation' | 'other';
   created_at: string;
   updated_at: string;
 }

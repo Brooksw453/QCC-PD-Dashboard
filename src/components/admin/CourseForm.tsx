@@ -27,6 +27,7 @@ export default function CourseForm({ course }: CourseFormProps) {
     image_url: course?.image_url || '',
     estimated_minutes: course?.estimated_minutes?.toString() || '',
     tags: course?.tags?.join(', ') || '',
+    format: course?.format || 'webpage',
     is_published: course?.is_published || false,
     sort_order: course?.sort_order?.toString() || '0',
   });
@@ -57,6 +58,7 @@ export default function CourseForm({ course }: CourseFormProps) {
       image_url: form.image_url || null,
       estimated_minutes: form.estimated_minutes ? parseInt(form.estimated_minutes) : null,
       tags: form.tags ? form.tags.split(',').map(t => t.trim()).filter(Boolean) : [],
+      format: form.format,
       is_published: form.is_published,
       sort_order: parseInt(form.sort_order) || 0,
       updated_at: new Date().toISOString(),
@@ -170,6 +172,22 @@ export default function CourseForm({ course }: CourseFormProps) {
           className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:bg-slate-700 dark:text-white rounded-lg text-sm focus:ring-2 focus:ring-qcc-sky focus:border-transparent"
           placeholder="https://example.com/image.jpg"
         />
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-qcc-dark dark:text-slate-100 mb-1">Format</label>
+        <select
+          value={form.format}
+          onChange={(e) => setForm(prev => ({ ...prev, format: e.target.value as Course['format'] }))}
+          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:bg-slate-700 dark:text-white rounded-lg text-sm focus:ring-2 focus:ring-qcc-sky focus:border-transparent"
+        >
+          <option value="webpage">Webpage</option>
+          <option value="document">Document (PDF, Word, etc.)</option>
+          <option value="video">Video</option>
+          <option value="articulate">Articulate Course</option>
+          <option value="presentation">Presentation</option>
+          <option value="other">Other</option>
+        </select>
       </div>
 
       <div className="grid grid-cols-2 gap-4">

@@ -15,12 +15,20 @@ export default async function AdminCoursesPage() {
     <div>
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-lg font-semibold text-qcc-dark dark:text-white">Manage Learning Items</h2>
-        <Link
-          href="/admin/courses/new"
-          className="px-4 py-2 bg-qcc-blue text-white rounded-lg text-sm font-medium hover:bg-qcc-blue-hover transition-colors"
-        >
-          + Add Learning Item
-        </Link>
+        <div className="flex items-center gap-2">
+          <Link
+            href="/admin/courses/import"
+            className="px-4 py-2 border border-gray-300 dark:border-gray-600 text-qcc-dark dark:text-gray-300 rounded-lg text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+          >
+            Import CSV
+          </Link>
+          <Link
+            href="/admin/courses/new"
+            className="px-4 py-2 bg-qcc-blue text-white rounded-lg text-sm font-medium hover:bg-qcc-blue-hover transition-colors"
+          >
+            + Add Learning Item
+          </Link>
+        </div>
       </div>
 
       {courses && courses.length > 0 ? (

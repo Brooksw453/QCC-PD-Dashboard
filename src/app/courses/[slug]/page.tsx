@@ -48,20 +48,47 @@ export default async function CourseDetailPage({ params }: Props) {
     completion = data;
   }
 
-  // Find pathways this course belongs to
+  // Find pathways this course belongs to, with position info
   const { data: pathwayCourses } = await supabase
     .from('pathway_courses')
-    .select('pathway:pathways(id, title, slug, badge_name, badge_color)')
+    .select('sort_order, pathway:pathways(id, title, slug, badge_name, badge_color, pathway_courses(id))')
     .eq('course_id', course.id);
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <Link href="/courses" className="text-sm text-qcc-sky hover:text-qcc-sky-hover mb-4 inline-flex items-center gap-1">
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+      {/* Breadcrumb */}
+      <nav className="flex items-center gap-2 text-sm mb-4">
+        <Link href="/courses" className="text-qcc-sky hover:text-qcc-sky-hover">Learning Items</Link>
+        <svg className="w-3.5 h-3.5 text-qcc-gray dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
         </svg>
-        Back to learning items
-      </Link>
+        <span className="text-qcc-gray dark:text-gray-400 truncate">{course.title}</span>
+      </nav>
+
+      {/* Completion status banner */}
+      {completion && (
+        <div className={`flex items-center gap-2 px-4 py-3 rounded-lg mb-4 text-sm font-medium ${
+          completion.verified_by
+            ? 'bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-400 border border-green-200 dark:border-green-800'
+            : 'bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-400 border border-green-200 dark:border-green-800'
+        }`}>
+          {completion.verified_by ? (
+            <>
+              <svg className="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+              </svg>
+              Verified Complete — Completed {new Date(completion.completed_at).toLocaleDateString()}
+            </>
+          ) : (
+            <>
+              <svg className="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+              Completed {new Date(completion.completed_at).toLocaleDateString()}
+            </>
+          )}
+        </div>
+      )}
 
       {course.image_url ? (
         <div className="aspect-video bg-gray-100 dark:bg-slate-700 rounded-xl overflow-hidden mb-6">
@@ -79,8 +106,10 @@ export default async function CourseDetailPage({ params }: Props) {
       {pathwayCourses && pathwayCourses.length > 0 && (
         <div className="flex flex-wrap gap-2 mb-4">
           {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-          {pathwayCourses.map((pc: any) => (
-            pc.pathway && (
+          {pathwayCourses.map((pc: any) => {
+            const totalInPathway = pc.pathway?.pathway_courses?.length || 0;
+            const position = pc.sort_order + 1;
+            return pc.pathway && (
               <Link
                 key={pc.pathway.id}
                 href={`/pathways/${pc.pathway.slug}`}
@@ -90,10 +119,10 @@ export default async function CourseDetailPage({ params }: Props) {
                 <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
                 </svg>
-                Part of: {pc.pathway.badge_name}
+                {pc.pathway.badge_name} — Item {position} of {totalInPathway}
               </Link>
-            )
-          ))}
+            );
+          })}
         </div>
       )}
 

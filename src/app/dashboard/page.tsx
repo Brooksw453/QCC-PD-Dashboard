@@ -36,15 +36,33 @@ export default async function DashboardPage() {
     .eq('user_id', user.id)
     .order('earned_at', { ascending: false });
 
-  // Get all published pathways to show progress
+  // Get all published pathways to show progress and up-next items
   const { data: pathways } = await supabase
     .from('pathways')
-    .select('*, pathway_courses(course_id)')
+    .select('*, pathway_courses(course_id, sort_order, course:courses(id, title, slug, short_description, estimated_minutes))')
     .eq('is_published', true)
     .order('sort_order');
 
   const completedCourseIds = new Set(completions?.map(c => c.course_id) || []);
   const badgePathwayIds = new Set(badges?.map(b => b.pathway_id) || []);
+
+  // Compute "Up Next" items — the next incomplete course in each in-progress pathway
+  const upNextItems = (pathways || [])
+    .filter(p => !badgePathwayIds.has(p.id)) // not fully completed
+    .map(pathway => {
+      const sorted = [...(pathway.pathway_courses || [])].sort((a: { sort_order: number }, b: { sort_order: number }) => a.sort_order - b.sort_order);
+      const nextCourse = sorted.find((pc: { course_id: string }) => !completedCourseIds.has(pc.course_id));
+      if (!nextCourse?.course) return null;
+      const completedCount = sorted.filter((pc: { course_id: string }) => completedCourseIds.has(pc.course_id)).length;
+      if (completedCount === 0) return null; // hasn't started this pathway yet
+      return {
+        pathway,
+        course: nextCourse.course,
+        completedCount,
+        totalCount: sorted.length,
+      };
+    })
+    .filter(Boolean);
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -172,8 +190,43 @@ export default async function DashboardPage() {
           )}
         </div>
 
-        {/* Completed Learning Items */}
+        {/* Up Next + Completed Learning Items */}
         <div className="lg:col-span-2">
+          {/* Up Next Section */}
+          {upNextItems.length > 0 && (
+            <div className="mb-8">
+              <h2 className="text-xl font-semibold text-qcc-dark dark:text-white mb-4">Up Next</h2>
+              <div className="space-y-3">
+                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                {upNextItems.map((item: any) => (
+                  <Link
+                    key={item.pathway.id}
+                    href={`/courses/${item.course.slug}`}
+                    className="block bg-white dark:bg-slate-800 border border-gray-200 dark:border-gray-700 rounded-xl p-4 hover:border-qcc-sky transition-colors"
+                    style={{ borderLeftWidth: '4px', borderLeftColor: item.pathway.badge_color }}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="min-w-0">
+                        <p className="font-medium text-qcc-dark dark:text-white text-sm">{item.course.title}</p>
+                        <p className="text-xs text-qcc-gray dark:text-gray-400 mt-0.5">
+                          {item.pathway.title} — {item.completedCount} of {item.totalCount} complete
+                        </p>
+                        {item.course.estimated_minutes && (
+                          <p className="text-xs text-qcc-gray dark:text-gray-400 mt-0.5">
+                            {item.course.estimated_minutes} min
+                          </p>
+                        )}
+                      </div>
+                      <svg className="w-5 h-5 text-qcc-sky shrink-0 ml-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-xl font-semibold text-qcc-dark dark:text-white">Completed Learning Items</h2>
             <Link href="/courses" className="text-sm text-qcc-sky hover:text-qcc-sky-hover font-medium">

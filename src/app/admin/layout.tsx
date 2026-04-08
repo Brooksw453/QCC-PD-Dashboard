@@ -11,6 +11,7 @@ const adminNav = [
   { href: '/admin/courses', label: 'Learning Items' },
   { href: '/admin/faculty', label: 'Faculty' },
   { href: '/admin/completions', label: 'Completions' },
+  { href: '/admin/analytics', label: 'Analytics' },
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {

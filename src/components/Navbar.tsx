@@ -88,12 +88,20 @@ export default function Navbar() {
           <div className="hidden md:flex items-center gap-2">
             <ThemeToggle />
             {user ? (
-              <button
-                onClick={handleSignOut}
-                className="px-4 py-2 text-sm font-medium text-qcc-gray dark:text-gray-400 hover:text-qcc-dark dark:hover:text-white transition-colors"
-              >
-                Sign Out
-              </button>
+              <>
+                <Link
+                  href="/profile"
+                  className="px-3 py-2 text-sm font-medium text-qcc-gray dark:text-gray-400 hover:text-qcc-dark dark:hover:text-white transition-colors"
+                >
+                  Profile
+                </Link>
+                <button
+                  onClick={handleSignOut}
+                  className="px-4 py-2 text-sm font-medium text-qcc-gray dark:text-gray-400 hover:text-qcc-dark dark:hover:text-white transition-colors"
+                >
+                  Sign Out
+                </button>
+              </>
             ) : (
               <>
                 <Link
@@ -140,12 +148,15 @@ export default function Navbar() {
             {user && role === 'admin' && navLink('/admin', 'Admin')}
             <hr className="my-2 border-gray-200 dark:border-gray-600" />
             {user ? (
-              <button
-                onClick={handleSignOut}
-                className="px-3 py-2 text-left text-sm font-medium text-qcc-gray dark:text-gray-400 hover:text-qcc-dark dark:hover:text-white"
-              >
-                Sign Out
-              </button>
+              <>
+                {navLink('/profile', 'Profile')}
+                <button
+                  onClick={handleSignOut}
+                  className="px-3 py-2 text-left text-sm font-medium text-qcc-gray dark:text-gray-400 hover:text-qcc-dark dark:hover:text-white"
+                >
+                  Sign Out
+                </button>
+              </>
             ) : (
               <>
                 {navLink('/login', 'Log In')}

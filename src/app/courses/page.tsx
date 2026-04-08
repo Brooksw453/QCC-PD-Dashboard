@@ -1,5 +1,5 @@
 import { createClient } from '@/lib/supabase/server';
-import CourseCard from '@/components/CourseCard';
+import CourseListClient from '@/components/CourseListClient';
 import type { Metadata } from 'next';
 
 export const dynamic = 'force-dynamic';
@@ -19,13 +19,13 @@ export default async function CoursesPage() {
 
   // Get completions for logged-in user
   const { data: { user } } = await supabase.auth.getUser();
-  let completedIds = new Set<string>();
+  let completedIds: string[] = [];
   if (user) {
     const { data: completions } = await supabase
       .from('completions')
       .select('course_id')
       .eq('user_id', user.id);
-    completedIds = new Set(completions?.map(c => c.course_id) || []);
+    completedIds = completions?.map(c => c.course_id) || [];
   }
 
   return (
@@ -36,15 +36,7 @@ export default async function CoursesPage() {
       </div>
 
       {courses && courses.length > 0 ? (
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {courses.map((course) => (
-            <CourseCard
-              key={course.id}
-              course={course}
-              completed={completedIds.has(course.id)}
-            />
-          ))}
-        </div>
+        <CourseListClient courses={courses} completedIds={completedIds} />
       ) : (
         <div className="text-center py-16">
           <svg className="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
