@@ -17,16 +17,27 @@ export default async function CoursesPage() {
     .eq('is_published', true)
     .order('sort_order');
 
-  // Get completions for logged-in user
+  // Get completions and favorites for logged-in user
   const { data: { user } } = await supabase.auth.getUser();
   let completedIds: string[] = [];
+  let favoritedIds: string[] = [];
   if (user) {
-    const { data: completions } = await supabase
-      .from('completions')
-      .select('course_id')
-      .eq('user_id', user.id);
+    const [{ data: completions }, { data: favorites }] = await Promise.all([
+      supabase.from('completions').select('course_id').eq('user_id', user.id),
+      supabase.from('favorites').select('course_id').eq('user_id', user.id),
+    ]);
     completedIds = completions?.map(c => c.course_id) || [];
+    favoritedIds = favorites?.map(f => f.course_id) || [];
   }
+
+  // Get average ratings per course
+  const { data: allRatings } = await supabase.from('ratings').select('course_id, rating');
+  const ratingMap: Record<string, { total: number; count: number }> = {};
+  allRatings?.forEach(r => {
+    if (!ratingMap[r.course_id]) ratingMap[r.course_id] = { total: 0, count: 0 };
+    ratingMap[r.course_id].total += r.rating;
+    ratingMap[r.course_id].count += 1;
+  });
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -36,7 +47,13 @@ export default async function CoursesPage() {
       </div>
 
       {courses && courses.length > 0 ? (
-        <CourseListClient courses={courses} completedIds={completedIds} />
+        <CourseListClient
+          courses={courses}
+          completedIds={completedIds}
+          favoritedIds={favoritedIds}
+          ratingMap={ratingMap}
+          isLoggedIn={!!user}
+        />
       ) : (
         <div className="text-center py-16">
           <svg className="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

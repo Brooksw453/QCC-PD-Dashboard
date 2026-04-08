@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QCC Professional Development Stats</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: transparent; }
+  .widget { background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px; max-width: 400px; }
+  .widget-title { font-size: 14px; font-weight: 600; color: #1F5A96; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .widget-title svg { width: 20px; height: 20px; }
+  .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .stat { background: #f8fafc; border-radius: 8px; padding: 12px; text-align: center; }
+  .stat-value { font-size: 24px; font-weight: 700; color: #1F5A96; }
+  .stat-label { font-size: 11px; color: #6b7280; margin-top: 2px; }
+  .widget-footer { margin-top: 12px; text-align: center; }
+  .widget-footer a { font-size: 11px; color: #1BA0D8; text-decoration: none; }
+  .widget-footer a:hover { text-decoration: underline; }
+  .loading { text-align: center; padding: 20px; color: #6b7280; font-size: 13px; }
+</style>
+</head>
+<body>
+<div class="widget" id="widget">
+  <div class="loading">Loading stats...</div>
+</div>
+<script>
+(function() {
+  var origin = window.location.origin || '';
+  var apiUrl = origin + '/api/stats';
+
+  // If embedded via iframe from another domain, use the data attribute
+  var script = document.currentScript;
+  if (script && script.getAttribute('data-api')) {
+    apiUrl = script.getAttribute('data-api');
+  }
+
+  fetch(apiUrl)
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      document.getElementById('widget').innerHTML =
+        '<div class="widget-title">' +
+          '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>' +
+          'QCC Professional Development' +
+        '</div>' +
+        '<div class="stats">' +
+          '<div class="stat"><div class="stat-value">' + (data.facultyTrained || 0) + '</div><div class="stat-label">Faculty Trained</div></div>' +
+          '<div class="stat"><div class="stat-value">' + (data.totalCompletions || 0) + '</div><div class="stat-label">Completions</div></div>' +
+          '<div class="stat"><div class="stat-value">' + (data.badgesEarned || 0) + '</div><div class="stat-label">Badges Earned</div></div>' +
+          '<div class="stat"><div class="stat-value">' + (data.pathwaysAvailable || 0) + '</div><div class="stat-label">Pathways</div></div>' +
+        '</div>' +
+        '<div class="widget-footer"><a href="' + origin + '" target="_blank">QCC Professional Development Dashboard</a></div>';
+    })
+    .catch(function() {
+      document.getElementById('widget').innerHTML = '<div class="loading">Unable to load stats.</div>';
+    });
+})();
+</script>
+</body>
+</html>

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Navbar from "@/components/Navbar";
+import AnnouncementBanner from "@/components/AnnouncementBanner";
 import Footer from "@/components/Footer";
 import "./globals.css";
 
@@ -31,6 +32,7 @@ export default function RootLayout({
       </head>
       <body className="min-h-full flex flex-col bg-white dark:bg-slate-900 text-qcc-dark dark:text-slate-100 transition-colors">
         <Navbar />
+        <AnnouncementBanner />
         <main className="flex-1">{children}</main>
         <Footer />
       </body>

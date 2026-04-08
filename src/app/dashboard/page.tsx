@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import CertificateButton from '@/components/CertificateButton';
+import OnboardingTour from '@/components/OnboardingTour';
 import type { Metadata } from 'next';
 
 export const dynamic = 'force-dynamic';
@@ -36,6 +37,13 @@ export default async function DashboardPage() {
     .eq('user_id', user.id)
     .order('earned_at', { ascending: false });
 
+  // Get user's favorites
+  const { data: favorites } = await supabase
+    .from('favorites')
+    .select('*, course:courses(id, title, slug, short_description, estimated_minutes, format)')
+    .eq('user_id', user.id)
+    .order('created_at', { ascending: false });
+
   // Get all published pathways to show progress and up-next items
   const { data: pathways } = await supabase
     .from('pathways')
@@ -66,6 +74,11 @@ export default async function DashboardPage() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      {/* Onboarding Tour */}
+      {profile && !profile.has_seen_onboarding && (
+        <OnboardingTour userId={user.id} />
+      )}
+
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-qcc-dark dark:text-white">
           Welcome, {profile?.full_name || 'Faculty'}
@@ -179,9 +192,20 @@ export default async function DashboardPage() {
                           }}
                         />
                       </div>
-                      <p className="text-xs text-qcc-gray dark:text-gray-400 mt-1">
-                        {completedInPathway} of {totalCourses} learning items
-                      </p>
+                      <div className="flex items-center justify-between mt-1">
+                        <p className="text-xs text-qcc-gray dark:text-gray-400">
+                          {completedInPathway} of {totalCourses} learning items
+                        </p>
+                        {pathway.deadline && !earned && (() => {
+                          const daysLeft = Math.ceil((new Date(pathway.deadline).getTime() - Date.now()) / 86400000);
+                          const color = daysLeft <= 7 ? 'text-red-600 dark:text-red-400' : daysLeft <= 30 ? 'text-amber-600 dark:text-amber-400' : 'text-qcc-gray dark:text-gray-400';
+                          return (
+                            <span className={`text-xs font-medium ${color}`}>
+                              {daysLeft > 0 ? `${daysLeft}d left` : 'Overdue'}
+                            </span>
+                          );
+                        })()}
+                      </div>
                     </Link>
                   );
                 })}
@@ -220,6 +244,32 @@ export default async function DashboardPage() {
                       <svg className="w-5 h-5 text-qcc-sky shrink-0 ml-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                       </svg>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Favorites Section */}
+          {favorites && favorites.length > 0 && (
+            <div className="mb-8">
+              <h2 className="text-xl font-semibold text-qcc-dark dark:text-white mb-4">My Favorites</h2>
+              <div className="space-y-3">
+                {favorites.map((fav) => (
+                  <Link
+                    key={fav.id}
+                    href={`/courses/${fav.course?.slug}`}
+                    className="flex items-center gap-3 bg-white dark:bg-slate-800 border border-gray-200 dark:border-gray-700 rounded-xl p-4 hover:border-qcc-sky transition-colors"
+                  >
+                    <svg className="w-5 h-5 text-red-500 shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z" />
+                    </svg>
+                    <div className="min-w-0">
+                      <p className="font-medium text-sm text-qcc-dark dark:text-white truncate">{fav.course?.title}</p>
+                      {fav.course?.estimated_minutes && (
+                        <p className="text-xs text-qcc-gray dark:text-gray-400">{fav.course.estimated_minutes} min</p>
+                      )}
                     </div>
                   </Link>
                 ))}

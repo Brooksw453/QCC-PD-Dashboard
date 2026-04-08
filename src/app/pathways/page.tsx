@@ -40,15 +40,23 @@ export default async function PathwaysPage() {
       {pathways && pathways.length > 0 ? (
         <div className="space-y-4">
           {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-          {pathways.map((pathway: any) => (
-            <PathwayCard
-              key={pathway.id}
-              pathway={pathway}
-              completedIds={completedIds}
-              earned={earnedBadgeIds.has(pathway.id)}
-              isLoggedIn={!!user}
-            />
-          ))}
+          {pathways.map((pathway: any) => {
+            const prerequisiteMet = !pathway.prerequisite_pathway_id || earnedBadgeIds.has(pathway.prerequisite_pathway_id);
+            const prerequisitePathway = pathway.prerequisite_pathway_id
+              ? pathways.find((p: any) => p.id === pathway.prerequisite_pathway_id)
+              : null;
+            return (
+              <PathwayCard
+                key={pathway.id}
+                pathway={pathway}
+                completedIds={completedIds}
+                earned={earnedBadgeIds.has(pathway.id)}
+                isLoggedIn={!!user}
+                prerequisiteMet={prerequisiteMet}
+                prerequisiteTitle={prerequisitePathway?.title}
+              />
+            );
+          })}
         </div>
       ) : (
         <div className="text-center py-16">

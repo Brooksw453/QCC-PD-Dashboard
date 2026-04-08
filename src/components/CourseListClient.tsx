@@ -2,11 +2,16 @@
 
 import { useState, useMemo } from 'react';
 import Link from 'next/link';
+import FavoriteButton from './FavoriteButton';
+import StarDisplay from './StarDisplay';
 import type { Course } from '@/lib/types';
 
 interface CourseListClientProps {
   courses: Course[];
   completedIds: string[];
+  favoritedIds?: string[];
+  ratingMap?: Record<string, { total: number; count: number }>;
+  isLoggedIn?: boolean;
 }
 
 function FormatIcon({ format }: { format: string }) {
@@ -56,11 +61,12 @@ const formatLabels: Record<string, string> = {
   other: 'Resource',
 };
 
-export default function CourseListClient({ courses, completedIds }: CourseListClientProps) {
+export default function CourseListClient({ courses, completedIds, favoritedIds = [], ratingMap = {}, isLoggedIn = false }: CourseListClientProps) {
   const [search, setSearch] = useState('');
   const [selectedTags, setSelectedTags] = useState<Set<string>>(new Set());
 
   const completedSet = useMemo(() => new Set(completedIds), [completedIds]);
+  const favoritedSet = useMemo(() => new Set(favoritedIds), [favoritedIds]);
 
   const allTags = useMemo(() => {
     const tags = new Set<string>();
@@ -141,12 +147,19 @@ export default function CourseListClient({ courses, completedIds }: CourseListCl
         <div className="bg-white dark:bg-slate-800 border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden divide-y divide-gray-100 dark:divide-gray-700">
           {filtered.map((course) => {
             const isCompleted = completedSet.has(course.id);
+            const courseRating = ratingMap[course.id];
+            const avgRating = courseRating ? courseRating.total / courseRating.count : 0;
             return (
-              <Link
-                key={course.id}
-                href={`/courses/${course.slug}`}
-                className="flex items-center gap-4 px-4 py-3.5 hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors group"
-              >
+              <div key={course.id} className="flex items-center gap-4 px-4 py-3.5 hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors group">
+                {/* Favorite */}
+                {isLoggedIn && (
+                  <FavoriteButton courseId={course.id} isFavorited={favoritedSet.has(course.id)} />
+                )}
+
+                <Link
+                  href={`/courses/${course.slug}`}
+                  className="flex items-center gap-4 flex-1 min-w-0"
+                >
                 {/* Format icon */}
                 <div className="w-10 h-10 rounded-lg bg-qcc-blue-light dark:bg-qcc-blue/20 flex items-center justify-center shrink-0 text-qcc-blue dark:text-qcc-sky group-hover:bg-qcc-blue group-hover:text-white dark:group-hover:bg-qcc-blue transition-colors">
                   <FormatIcon format={course.format || 'webpage'} />
@@ -189,11 +202,19 @@ export default function CourseListClient({ courses, completedIds }: CourseListCl
                   ))}
                 </div>
 
+                {/* Rating */}
+                {avgRating > 0 && (
+                  <span className="hidden md:inline shrink-0">
+                    <StarDisplay rating={avgRating} count={courseRating?.count} />
+                  </span>
+                )}
+
                 {/* Arrow */}
                 <svg className="w-4 h-4 text-gray-300 dark:text-gray-600 shrink-0 group-hover:text-qcc-sky transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
               </Link>
+              </div>
             );
           })}
         </div>

@@ -23,11 +23,14 @@ export default function PathwayForm({ pathway, assignedCourseIds = [] }: Pathway
     badge_name: pathway?.badge_name || '',
     badge_color: pathway?.badge_color || '#1F5A96',
     badge_image_url: pathway?.badge_image_url || '',
+    deadline: pathway?.deadline ? new Date(pathway.deadline).toISOString().slice(0, 16) : '',
+    prerequisite_pathway_id: pathway?.prerequisite_pathway_id || '',
     is_published: pathway?.is_published || false,
     sort_order: pathway?.sort_order?.toString() || '0',
   });
   const [selectedCourseIds, setSelectedCourseIds] = useState<string[]>(assignedCourseIds);
   const [allCourses, setAllCourses] = useState<Course[]>([]);
+  const [allPathways, setAllPathways] = useState<{ id: string; title: string }[]>([]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const supabase = createClient();
@@ -36,6 +39,9 @@ export default function PathwayForm({ pathway, assignedCourseIds = [] }: Pathway
   useEffect(() => {
     supabase.from('courses').select('*').order('sort_order').then(({ data }) => {
       if (data) setAllCourses(data);
+    });
+    supabase.from('pathways').select('id, title').order('title').then(({ data }) => {
+      if (data) setAllPathways(data.filter(p => p.id !== pathway?.id));
     });
   }, []);
 
@@ -65,6 +71,8 @@ export default function PathwayForm({ pathway, assignedCourseIds = [] }: Pathway
       badge_name: form.badge_name,
       badge_color: form.badge_color,
       badge_image_url: form.badge_image_url || null,
+      deadline: form.deadline ? new Date(form.deadline).toISOString() : null,
+      prerequisite_pathway_id: form.prerequisite_pathway_id || null,
       is_published: form.is_published,
       sort_order: parseInt(form.sort_order) || 0,
       updated_at: new Date().toISOString(),
@@ -173,6 +181,35 @@ export default function PathwayForm({ pathway, assignedCourseIds = [] }: Pathway
               className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 dark:bg-slate-700 dark:text-white rounded-lg text-sm focus:ring-2 focus:ring-qcc-sky focus:border-transparent"
             />
           </div>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <label className="block text-sm font-medium text-qcc-dark dark:text-slate-100 mb-1">
+            Deadline <span className="text-qcc-gray dark:text-gray-400 font-normal">(optional)</span>
+          </label>
+          <input
+            type="datetime-local"
+            value={form.deadline}
+            onChange={(e) => setForm(prev => ({ ...prev, deadline: e.target.value }))}
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:bg-slate-700 dark:text-white rounded-lg text-sm focus:ring-2 focus:ring-qcc-sky focus:border-transparent"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-qcc-dark dark:text-slate-100 mb-1">
+            Prerequisite <span className="text-qcc-gray dark:text-gray-400 font-normal">(optional)</span>
+          </label>
+          <select
+            value={form.prerequisite_pathway_id}
+            onChange={(e) => setForm(prev => ({ ...prev, prerequisite_pathway_id: e.target.value }))}
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:bg-slate-700 dark:text-white rounded-lg text-sm focus:ring-2 focus:ring-qcc-sky focus:border-transparent"
+          >
+            <option value="">None</option>
+            {allPathways.map(p => (
+              <option key={p.id} value={p.id}>{p.title}</option>
+            ))}
+          </select>
         </div>
       </div>
 

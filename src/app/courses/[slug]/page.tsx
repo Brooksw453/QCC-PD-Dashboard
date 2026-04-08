@@ -2,6 +2,10 @@ import { createClient } from '@/lib/supabase/server';
 import { notFound } from 'next/navigation';
 import LaunchCourseButton from '@/components/LaunchCourseButton';
 import CompletionButton from '@/components/CompletionButton';
+import FavoriteButton from '@/components/FavoriteButton';
+import CourseNotes from '@/components/CourseNotes';
+import CourseRating from '@/components/CourseRating';
+import StarDisplay from '@/components/StarDisplay';
 import Link from 'next/link';
 import type { Metadata } from 'next';
 
@@ -47,6 +51,31 @@ export default async function CourseDetailPage({ params }: Props) {
       .single();
     completion = data;
   }
+
+  // Fetch favorite, note, and rating for logged-in user
+  let isFavorited = false;
+  let noteContent = '';
+  let userRating: { rating: number; comment: string | null } | null = null;
+  if (user) {
+    const [{ data: fav }, { data: note }, { data: rating }] = await Promise.all([
+      supabase.from('favorites').select('id').eq('user_id', user.id).eq('course_id', course.id).single(),
+      supabase.from('notes').select('content').eq('user_id', user.id).eq('course_id', course.id).single(),
+      supabase.from('ratings').select('rating, comment').eq('user_id', user.id).eq('course_id', course.id).single(),
+    ]);
+    isFavorited = !!fav;
+    noteContent = note?.content || '';
+    userRating = rating;
+  }
+
+  // Fetch average rating
+  const { data: allRatings } = await supabase
+    .from('ratings')
+    .select('rating')
+    .eq('course_id', course.id);
+  const avgRating = allRatings && allRatings.length > 0
+    ? allRatings.reduce((sum, r) => sum + r.rating, 0) / allRatings.length
+    : 0;
+  const ratingCount = allRatings?.length || 0;
 
   // Find pathways this course belongs to, with position info
   const { data: pathwayCourses } = await supabase
@@ -126,7 +155,16 @@ export default async function CourseDetailPage({ params }: Props) {
         </div>
       )}
 
-      <h1 className="text-3xl font-bold text-qcc-dark dark:text-white mb-3">{course.title}</h1>
+      <div className="flex items-start justify-between gap-3 mb-3">
+        <h1 className="text-3xl font-bold text-qcc-dark dark:text-white">{course.title}</h1>
+        {user && <FavoriteButton courseId={course.id} isFavorited={isFavorited} />}
+      </div>
+
+      {ratingCount > 0 && (
+        <div className="mb-3">
+          <StarDisplay rating={avgRating} count={ratingCount} size="md" />
+        </div>
+      )}
 
       <div className="flex flex-wrap items-center gap-3 mb-6 text-sm text-qcc-gray dark:text-gray-400">
         {course.estimated_minutes && (
@@ -167,6 +205,20 @@ export default async function CourseDetailPage({ params }: Props) {
           </Link>
         )}
       </div>
+
+      {/* Rating (only after completion) */}
+      {user && completion && (
+        <CourseRating
+          courseId={course.id}
+          existingRating={userRating?.rating || null}
+          existingComment={userRating?.comment || null}
+        />
+      )}
+
+      {/* Personal notes */}
+      {user && (
+        <CourseNotes courseId={course.id} initialContent={noteContent} />
+      )}
     </div>
   );
 }

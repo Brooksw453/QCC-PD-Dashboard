@@ -11,7 +11,7 @@ interface CompletionRow {
   completed_at: string;
   verified_by: string | null;
   verified_at: string | null;
-  profile: { full_name: string; email: string } | null;
+  profile: { full_name: string; email: string; department: string | null } | null;
   course: { title: string } | null;
 }
 
@@ -43,9 +43,39 @@ export default function CompletionsManager({ initialCompletions }: Props) {
     router.refresh();
   };
 
+  const handleExportCsv = () => {
+    const escape = (val: string) => `"${(val || '').replace(/"/g, '""')}"`;
+    const header = 'Faculty Name,Email,Department,Learning Item,Completion Date,Status,Verified Date';
+    const rows = completions.map(c => [
+      escape(c.profile?.full_name || ''),
+      escape(c.profile?.email || ''),
+      escape(c.profile?.department || ''),
+      escape(c.course?.title || ''),
+      escape(new Date(c.completed_at).toLocaleDateString()),
+      c.verified_by ? 'Verified' : 'Self-reported',
+      c.verified_at ? escape(new Date(c.verified_at).toLocaleDateString()) : '',
+    ].join(','));
+    const csv = [header, ...rows].join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `completions_${new Date().toISOString().split('T')[0]}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div>
-      <h2 className="text-lg font-semibold text-qcc-dark dark:text-white mb-6">Manage Completions</h2>
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-lg font-semibold text-qcc-dark dark:text-white">Manage Completions</h2>
+        {completions.length > 0 && (
+          <button onClick={handleExportCsv}
+            className="px-4 py-2 border border-gray-300 dark:border-gray-600 text-qcc-dark dark:text-gray-300 rounded-lg text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+            Export CSV
+          </button>
+        )}
+      </div>
 
       {completions.length > 0 ? (
         <div className="bg-white dark:bg-slate-800 border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">

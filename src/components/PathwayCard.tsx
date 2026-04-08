@@ -23,14 +23,17 @@ interface PathwayCardProps {
     description: string;
     badge_name: string;
     badge_color: string;
+    deadline: string | null;
     pathway_courses: PathwayCourseItem[];
   };
   completedIds: string[];
   earned: boolean;
   isLoggedIn: boolean;
+  prerequisiteMet?: boolean;
+  prerequisiteTitle?: string;
 }
 
-export default function PathwayCard({ pathway, completedIds, earned, isLoggedIn }: PathwayCardProps) {
+export default function PathwayCard({ pathway, completedIds, earned, isLoggedIn, prerequisiteMet = true, prerequisiteTitle }: PathwayCardProps) {
   const [expanded, setExpanded] = useState(false);
   const completedSet = new Set(completedIds);
   const totalItems = pathway.pathway_courses?.length || 0;
@@ -72,6 +75,23 @@ export default function PathwayCard({ pathway, completedIds, earned, isLoggedIn 
                 </p>
               </div>
               <div className="flex items-center gap-2 shrink-0">
+                {!prerequisiteMet && isLoggedIn && (
+                  <span className="text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 px-2.5 py-1 rounded-full font-medium flex items-center gap-1">
+                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                    </svg>
+                    Locked
+                  </span>
+                )}
+                {pathway.deadline && !earned && (() => {
+                  const daysLeft = Math.ceil((new Date(pathway.deadline).getTime() - Date.now()) / 86400000);
+                  const color = daysLeft <= 7 ? 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400' : daysLeft <= 30 ? 'bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400' : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400';
+                  return (
+                    <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${color}`}>
+                      {daysLeft > 0 ? `${daysLeft}d left` : 'Overdue'}
+                    </span>
+                  );
+                })()}
                 {earned && (
                   <span className="text-xs bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 px-2.5 py-1 rounded-full font-medium">
                     Badge Earned!
@@ -90,8 +110,15 @@ export default function PathwayCard({ pathway, completedIds, earned, isLoggedIn 
 
             <p className="text-sm text-qcc-gray dark:text-gray-400 mt-1 line-clamp-2">{pathway.description}</p>
 
+            {/* Prerequisite notice */}
+            {!prerequisiteMet && isLoggedIn && prerequisiteTitle && (
+              <p className="text-xs text-amber-600 dark:text-amber-400 mt-2 font-medium">
+                Complete &quot;{prerequisiteTitle}&quot; first to unlock this pathway.
+              </p>
+            )}
+
             {/* Progress bar */}
-            {isLoggedIn && (
+            {isLoggedIn && prerequisiteMet && (
               <div className="mt-3">
                 <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2.5">
                   <div
