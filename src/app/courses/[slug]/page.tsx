@@ -120,15 +120,36 @@ export default async function CourseDetailPage({ params }: Props) {
         </div>
       )}
 
-      {course.image_url ? (
-        <div className="aspect-video bg-gray-100 dark:bg-slate-700 rounded-xl overflow-hidden mb-6">
-          <img src={course.image_url} alt={course.title} className="w-full h-full object-cover" />
+      {/* Header with format icon */}
+      <div className="flex items-start gap-4 mb-4">
+        <div className="w-14 h-14 rounded-xl bg-qcc-blue-light dark:bg-qcc-blue/20 flex items-center justify-center shrink-0 text-qcc-blue dark:text-qcc-sky">
+          <FormatIcon format={course.format || 'webpage'} className="w-7 h-7" />
         </div>
-      ) : (
-        <div className="aspect-video bg-gradient-to-br from-qcc-blue to-qcc-sky rounded-xl flex items-center justify-center mb-6">
-          <FormatIcon format={course.format || 'webpage'} className="w-20 h-20 text-white/30" />
+        <div className="flex-1 min-w-0">
+          <div className="flex items-start justify-between gap-3">
+            <h1 className="text-2xl font-bold text-qcc-dark dark:text-white">{course.title}</h1>
+            {user && <FavoriteButton courseId={course.id} isFavorited={isFavorited} />}
+          </div>
+          <div className="flex flex-wrap items-center gap-3 mt-1.5 text-sm text-qcc-gray dark:text-gray-400">
+            {course.estimated_minutes && (
+              <span className="flex items-center gap-1">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                {course.estimated_minutes} min
+              </span>
+            )}
+            {course.tags?.map((tag: string) => (
+              <span key={tag} className="bg-qcc-blue-light dark:bg-qcc-blue/20 text-qcc-blue dark:text-qcc-sky px-2.5 py-0.5 rounded-full text-xs">
+                {tag}
+              </span>
+            ))}
+            {ratingCount > 0 && (
+              <StarDisplay rating={avgRating} count={ratingCount} />
+            )}
+          </div>
         </div>
-      )}
+      </div>
 
       {/* Pathway banner */}
       {pathwayCourses && pathwayCourses.length > 0 && (
@@ -141,10 +162,10 @@ export default async function CourseDetailPage({ params }: Props) {
               <Link
                 key={pc.pathway.id}
                 href={`/pathways/${pc.pathway.slug}`}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white hover:opacity-90 transition-opacity"
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium text-white hover:opacity-90 transition-opacity"
                 style={{ backgroundColor: pc.pathway.badge_color }}
               >
-                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
                 </svg>
                 {pc.pathway.badge_name} — Item {position} of {totalInPathway}
@@ -154,32 +175,11 @@ export default async function CourseDetailPage({ params }: Props) {
         </div>
       )}
 
-      <div className="flex items-start justify-between gap-3 mb-3">
-        <h1 className="text-3xl font-bold text-qcc-dark dark:text-white">{course.title}</h1>
-        {user && <FavoriteButton courseId={course.id} isFavorited={isFavorited} />}
-      </div>
-
-      {ratingCount > 0 && (
-        <div className="mb-3">
-          <StarDisplay rating={avgRating} count={ratingCount} size="md" />
+      {course.image_url && (
+        <div className="aspect-video bg-gray-100 dark:bg-slate-700 rounded-xl overflow-hidden mb-6">
+          <img src={course.image_url} alt={course.title} className="w-full h-full object-cover" />
         </div>
       )}
-
-      <div className="flex flex-wrap items-center gap-3 mb-6 text-sm text-qcc-gray dark:text-gray-400">
-        {course.estimated_minutes && (
-          <span className="flex items-center gap-1">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            {course.estimated_minutes} minutes
-          </span>
-        )}
-        {course.tags?.map((tag: string) => (
-          <span key={tag} className="bg-qcc-blue-light dark:bg-qcc-blue/20 text-qcc-blue dark:text-qcc-sky px-2.5 py-0.5 rounded-full text-xs">
-            {tag}
-          </span>
-        ))}
-      </div>
 
       <div className="prose max-w-none mb-8">
         <p className="text-lg text-qcc-gray dark:text-gray-300 leading-relaxed">{course.description}</p>

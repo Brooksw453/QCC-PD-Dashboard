@@ -66,10 +66,11 @@ export default function SettingsForm({ initialWebhookUrl }: Props) {
   return (
     <div className="max-w-2xl space-y-8">
       <form onSubmit={handleSave} className="bg-white dark:bg-slate-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6 space-y-4">
-        <h3 className="font-semibold text-sm text-qcc-dark dark:text-white">Slack / Teams Webhook</h3>
+        <h3 className="font-semibold text-sm text-qcc-dark dark:text-white">Microsoft Teams Webhook</h3>
         <p className="text-xs text-qcc-gray dark:text-gray-400">
-          Configure a webhook URL to receive notifications when faculty members earn badges.
-          Works with Slack Incoming Webhooks or Microsoft Teams connectors.
+          Configure a webhook URL to receive notifications in Microsoft Teams when faculty members earn badges.
+          In Teams, add an Incoming Webhook connector to your channel, copy the URL, and paste it below.
+          Also compatible with Slack Incoming Webhooks.
         </p>
 
         {message && (
