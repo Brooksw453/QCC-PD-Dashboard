@@ -78,7 +78,7 @@ export default function CourseListClient({ courses, completedIds, favoritedIds =
               <button
                 key={tag}
                 onClick={() => toggleTag(tag)}
-                className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
+                className={`px-4 py-2 rounded-full text-xs font-medium transition-colors min-h-[36px] ${
                   selectedTags.has(tag)
                     ? 'bg-qcc-blue text-white'
                     : 'bg-qcc-blue-light dark:bg-qcc-blue/20 text-qcc-blue dark:text-qcc-sky hover:bg-qcc-blue hover:text-white dark:hover:bg-qcc-blue'
@@ -90,7 +90,7 @@ export default function CourseListClient({ courses, completedIds, favoritedIds =
             {selectedTags.size > 0 && (
               <button
                 onClick={() => setSelectedTags(new Set())}
-                className="px-3 py-1 rounded-full text-xs font-medium text-qcc-gray dark:text-gray-400 hover:text-qcc-dark dark:hover:text-white"
+                className="px-4 py-2 rounded-full text-xs font-medium text-qcc-gray dark:text-gray-400 hover:text-qcc-dark dark:hover:text-white min-h-[36px]"
               >
                 Clear filters
               </button>

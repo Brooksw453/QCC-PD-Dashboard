@@ -53,18 +53,18 @@ export default function OnboardingTour({ userId }: Props) {
   const step = steps[currentStep];
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
       {/* Backdrop */}
       <div className="absolute inset-0 bg-black/60" onClick={dismiss} />
 
       {/* Modal */}
-      <div className="relative bg-white dark:bg-slate-800 rounded-2xl shadow-2xl max-w-md w-full mx-4 p-8 text-center">
+      <div className="relative bg-white dark:bg-slate-800 rounded-2xl shadow-2xl max-w-md w-full p-6 sm:p-8 text-center max-h-[90vh] overflow-y-auto">
         {/* Progress dots */}
-        <div className="flex items-center justify-center gap-1.5 mb-6">
+        <div className="flex items-center justify-center gap-2 mb-6">
           {steps.map((_, i) => (
             <div
               key={i}
-              className={`w-2 h-2 rounded-full transition-colors ${
+              className={`w-2.5 h-2.5 rounded-full transition-colors ${
                 i === currentStep ? 'bg-qcc-blue' : i < currentStep ? 'bg-qcc-sky' : 'bg-gray-300 dark:bg-gray-600'
               }`}
             />
@@ -85,13 +85,13 @@ export default function OnboardingTour({ userId }: Props) {
         <h2 className="text-lg font-bold text-qcc-dark dark:text-white mb-2">{step.title}</h2>
         <p className="text-sm text-qcc-gray dark:text-gray-400 mb-6 leading-relaxed">{step.description}</p>
 
-        <div className="flex items-center justify-center gap-3">
+        <div className="flex items-center justify-center gap-4">
           <button onClick={dismiss}
-            className="px-4 py-2 text-sm text-qcc-gray dark:text-gray-400 hover:text-qcc-dark dark:hover:text-white transition-colors">
+            className="min-h-[44px] px-6 py-3 text-sm text-qcc-gray dark:text-gray-400 hover:text-qcc-dark dark:hover:text-white transition-colors rounded-lg">
             Skip
           </button>
           <button onClick={next}
-            className="px-6 py-2 bg-qcc-blue text-white rounded-lg text-sm font-medium hover:bg-qcc-blue-hover transition-colors">
+            className="min-h-[44px] px-8 py-3 bg-qcc-blue text-white rounded-lg text-sm font-medium hover:bg-qcc-blue-hover transition-colors">
             {currentStep === steps.length - 1 ? 'Get Started' : 'Next'}
           </button>
         </div>

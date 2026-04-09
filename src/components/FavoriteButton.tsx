@@ -39,7 +39,7 @@ export default function FavoriteButton({ courseId, isFavorited: initial }: Props
     <button
       onClick={toggle}
       disabled={loading}
-      className="p-1 transition-colors disabled:opacity-50"
+      className="p-2 min-w-[44px] min-h-[44px] flex items-center justify-center transition-colors disabled:opacity-50"
       aria-label={favorited ? 'Remove from favorites' : 'Add to favorites'}
       title={favorited ? 'Remove from favorites' : 'Add to favorites'}
     >

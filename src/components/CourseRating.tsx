@@ -67,7 +67,7 @@ export default function CourseRating({ courseId, existingRating, existingComment
     <div className="mt-6 border-t border-gray-200 dark:border-gray-700 pt-6">
       <div className="flex items-center gap-3">
         <span className="text-sm font-medium text-qcc-dark dark:text-slate-100">Rate this item:</span>
-        <div className="flex items-center gap-0.5">
+        <div className="flex items-center gap-0">
           {[1, 2, 3, 4, 5].map(star => (
             <button
               key={star}
@@ -75,10 +75,10 @@ export default function CourseRating({ courseId, existingRating, existingComment
               onMouseEnter={() => setHovered(star)}
               onMouseLeave={() => setHovered(0)}
               disabled={saving}
-              className="p-0.5 transition-colors disabled:opacity-50"
+              className="p-1.5 min-w-[44px] min-h-[44px] flex items-center justify-center transition-colors disabled:opacity-50"
             >
               <svg
-                className={`w-6 h-6 ${
+                className={`w-7 h-7 ${
                   star <= (hovered || rating) ? 'text-amber-400' : 'text-gray-300 dark:text-gray-600'
                 } transition-colors`}
                 fill="currentColor"
@@ -96,7 +96,7 @@ export default function CourseRating({ courseId, existingRating, existingComment
       {rating > 0 && (
         <div className="mt-3">
           {!showComment ? (
-            <button onClick={() => setShowComment(true)} className="text-xs text-qcc-sky hover:text-qcc-sky-hover font-medium">
+            <button onClick={() => setShowComment(true)} className="text-sm text-qcc-sky hover:text-qcc-sky-hover font-medium py-2">
               Add a comment
             </button>
           ) : (
